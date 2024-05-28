@@ -21,7 +21,7 @@ framebuffer = sharpdisplay.SharpMemoryFramebuffer(bus, chip_select_pin, width=14
 
 display = framebufferio.FramebufferDisplay(framebuffer, rotation = 0)
 bitmap, palette = adafruit_imageload.load(
-    "/avtar/mceo.bmp",
+    "/avatar/mceo.bmp",
     bitmap=displayio.Bitmap,
     palette=displayio.Palette
 )
