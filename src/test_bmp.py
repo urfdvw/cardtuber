@@ -4,10 +4,14 @@ import displayio
 import framebufferio
 import sharpdisplay
 import adafruit_imageload
+from adafruit_display_shapes.rect import Rect
 import gc
 from math import sin
 from time import monotonic as t
 from time import sleep
+
+jump_scale = 5
+
 
 displayio.release_displays()
 
@@ -17,7 +21,7 @@ framebuffer = sharpdisplay.SharpMemoryFramebuffer(bus, chip_select_pin, width=14
 
 display = framebufferio.FramebufferDisplay(framebuffer, rotation = 0)
 bitmap, palette = adafruit_imageload.load(
-    "/maker.bmp",
+    "/avtar/mceo.bmp",
     bitmap=displayio.Bitmap,
     palette=displayio.Palette
 )
@@ -25,10 +29,14 @@ bitmap, palette = adafruit_imageload.load(
 # Create a TileGrid to hold the bitmap
 tile_grid = displayio.TileGrid(bitmap, pixel_shader=palette)
 
+# Create a rectangle
+rect = Rect(0, 168 - jump_scale, 144, jump_scale, fill=0xffffff)
+
 # Create a Group to hold the TileGrid
 group = displayio.Group()
 
 # Add the TileGrid to the Group
+group.append(rect)
 group.append(tile_grid)
 
 # Add the Group to the Display
@@ -36,12 +44,12 @@ display.root_group = group
 
 print(gc.mem_free())
 
+#%% main
 # Loop forever so you can enjoy your image
-scale = 10
 print('startplot:', 'y')
 while True:
-    y = int(sin(t())*scale)
+    y = - abs(int(sin(t()*3)*jump_scale))
     print(y)
-    group.y = y
+    tile_grid.y = y
     sleep(0.05)
     
