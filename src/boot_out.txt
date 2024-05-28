@@ -1,0 +1,3 @@
+Adafruit CircuitPython 9.0.5 on 2024-05-22; Seeed XIAO nRF52840 Sense with nRF52840
+Board ID:Seeed_XIAO_nRF52840_Sense
+UID:A5B3C6D3ED5C85CF
