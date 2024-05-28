@@ -1,1 +1,1 @@
-from test_touchbar import *
+from test_bmp import *
