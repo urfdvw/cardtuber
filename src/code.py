@@ -1,1 +1,1 @@
-from test_bmp_blink import *
+from test_async import *
