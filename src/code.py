@@ -1,1 +1,1 @@
-from test_bmp import *
+from test_sense import *
