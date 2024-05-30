@@ -7,6 +7,7 @@ from adafruit_display_shapes.rect import Rect
 import gc
 from time import monotonic as t
 from time import sleep
+from random import random
 
 from cardtuber import MicVolume
 from touchpad import State
@@ -65,6 +66,11 @@ print(gc.mem_free())
 
 mv = MicVolume(N=4, length=80)
 speak = State()
+blink = State()
+blink_max = 5 # at least blink once every x sec
+blink_min = 2 # not to blink x sec once blinked
+blink_timer = 0
+blink_last_t = t()
 while True:
     mv.record()
     vol = mv.getVolume()
@@ -72,6 +78,15 @@ while True:
         speak.now = 1
     else:
         speak.now = 0
+        
+    if blink.now == 0 and t() - blink_last_t >= blink_timer:
+        blink.now = 1
+        blink_last_t = t()
+        
+    if blink.now == 1 and t() - blink_last_t >= 0.2:
+        blink.now = 0
+        blink_last_t = t()
+        blink_timer = blink_min + random() * (blink_max - blink_min)
     
     if speak.diff == 1:
         tile_grid.bitmap = moeo_bmp
@@ -83,3 +98,14 @@ while True:
         tile_grid.y = -jump_scale
     elif speak.diff == 0 and speak.now == 0:
         tile_grid.y = 0
+
+    if blink.diff == 1:
+        if speak.now == 1:
+            tile_grid.bitmap = moec_bmp
+        if speak.now == 0:
+            tile_grid.bitmap = mcec_bmp
+    elif blink.diff == -1:
+        if speak.now == 1:
+            tile_grid.bitmap = moeo_bmp
+        if speak.now == 0:
+            tile_grid.bitmap = mceo_bmp
