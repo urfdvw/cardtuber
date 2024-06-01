@@ -11,6 +11,9 @@ from random import random
 
 from cardtuber import MicVolume
 from touchpad import State
+from connected_variables import ConnectedVariables
+
+cv = ConnectedVariables()
 
 jump_scale = 4
 
@@ -71,10 +74,13 @@ blink_max = 5 # at least blink once every x sec
 blink_min = 2 # not to blink x sec once blinked
 blink_timer = 0
 blink_last_t = t()
+cv.define('vol', 0.0)
+cv.define('thr', 6.0)
 while True:
     mv.record()
     vol = mv.getVolume()
-    if vol > 6:
+    cv.write('vol', round(vol, 1)) # for monitoring
+    if vol > cv.read('thr'):
         speak.now = 1
     else:
         speak.now = 0

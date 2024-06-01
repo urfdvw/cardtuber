@@ -59,6 +59,7 @@ class ConnectedVariables:
         """
         assert type(var_name) == type(""), "var_name should be string"
         self.vars[var_name] = initdata
+        self.update()
 
     def serial_read(self):
         """

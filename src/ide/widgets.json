@@ -1,0 +1,32 @@
+[
+  {
+    "id": 0,
+    "widgetType": "Display",
+    "variableName": "vol",
+    "description": "Display volume value",
+    "x": 360,
+    "y": 250
+  },
+  {
+    "id": 1,
+    "widgetType": "Slider",
+    "variableName": "thr",
+    "description": "volume threshold",
+    "x": 30,
+    "y": 30,
+    "rangeMin": 0,
+    "rangeMax": 15,
+    "step": 0.1,
+    "set": 12.3
+  },
+  {
+    "id": 2,
+    "widgetType": "SliderReadOnly",
+    "variableName": "vol",
+    "description": "volume",
+    "x": 30,
+    "y": 250,
+    "rangeMin": 0,
+    "rangeMax": 15
+  }
+]
