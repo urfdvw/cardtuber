@@ -38,6 +38,10 @@ touch_pads = [
     touchio.TouchIn(board.SCL),
     touchio.TouchIn(board.TX)
 ]
+pad_min = [211, 212, 212, 212, 212, 212, 171]
+for i in range(len(touch_pads)):
+    touch_pads[i].threshold = pad_min[i] + 50
+
 
 touch_bar_phy = TouchBarPhysicsSimple(
     pads=touch_pads,
@@ -79,7 +83,8 @@ qr_bmp, palette = adafruit_imageload.load(
 rect = Rect(0, 0, 144, 168, fill=0xffffff)
 
 tile_grid = displayio.TileGrid(mceo_bmp, pixel_shader=palette)
-tile_grid_qr = displayio.TileGrid(qr_bmp, pixel_shader=palette, y=168)
+tile_grid_qr = displayio.TileGrid(qr_bmp, pixel_shader=palette)
+tile_grid_qr.y = 168
 
 group = displayio.Group()
 group.append(rect)
@@ -144,7 +149,7 @@ while True:
             
     touch_bar_phy.get()
     if touch_bar_phy.z.now > 0.5:
-        tile_grid_qr.y += int(touch_bar_phy.x.diff * 60)
+        tile_grid_qr.y += int(touch_bar_phy.x.diff * 50)
     else:
         if tile_grid_qr.y > 84:
             tile_grid_qr.y += (168 - tile_grid_qr.y) // 2
