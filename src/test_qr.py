@@ -1,28 +1,53 @@
+# Python native
+import gc
+from random import random
+from time import monotonic as t
+from time import sleep
+
+# Board native
 import board
 import displayio
 import framebufferio
 import sharpdisplay
-import adafruit_imageload
-from adafruit_display_shapes.rect import Rect
-import gc
-from time import monotonic as t
-from time import sleep
-from random import random
+import touchio
 
+# Adafruit
+from adafruit_display_shapes.rect import Rect
+import adafruit_imageload
+
+# Mine
 from cardtuber import MicVolume
-from touchpad import State
 from connected_variables import ConnectedVariables
+from touchpad import State, TouchBarPhysicsSimple
+
+#%% parameters
+jump_scale = 4
+blink_max = 5 # at least blink once every x sec
+blink_min = 2 # not to blink x sec once blinked
+
+#%% define
 
 cv = ConnectedVariables()
 
-jump_scale = 4
+touch_pads = [
+    touchio.TouchIn(board.A0),
+    touchio.TouchIn(board.A1),
+    touchio.TouchIn(board.A2),
+    touchio.TouchIn(board.A3),
+    touchio.TouchIn(board.SDA),
+    touchio.TouchIn(board.SCL),
+    touchio.TouchIn(board.TX)
+]
+
+touch_bar_phy = TouchBarPhysicsSimple(
+    pads=touch_pads,
+)
 
 displayio.release_displays()
 
 bus = board.SPI()
 chip_select_pin = board.RX
 framebuffer = sharpdisplay.SharpMemoryFramebuffer(bus, chip_select_pin, width=144, height=168, baudrate=8000000)
-
 display = framebufferio.FramebufferDisplay(framebuffer, rotation = 0)
 
 mceo_bmp, palette = adafruit_imageload.load(
@@ -51,22 +76,16 @@ qr_bmp, palette = adafruit_imageload.load(
     palette=displayio.Palette
 )
 
-# Create a TileGrid to hold the bitmap
+rect = Rect(0, 0, 144, 168, fill=0xffffff)
+
 tile_grid = displayio.TileGrid(mceo_bmp, pixel_shader=palette)
 tile_grid_qr = displayio.TileGrid(qr_bmp, pixel_shader=palette)
 
-# Create background
-rect = Rect(0, 0, 144, 168, fill=0xffffff)
-
-# Create a Group to hold the TileGrid
 group = displayio.Group()
-
-# Add the TileGrid to the Group
 group.append(rect)
 group.append(tile_grid)
 group.append(tile_grid_qr)
 
-# Add the Group to the Display
 display.root_group = group
 
 print(gc.mem_free())
@@ -77,8 +96,6 @@ print(gc.mem_free())
 mv = MicVolume(N=4, length=80)
 speak = State()
 blink = State()
-blink_max = 5 # at least blink once every x sec
-blink_min = 2 # not to blink x sec once blinked
 blink_timer = 0
 blink_last_t = t()
 cv.define('vol', 0.0)
@@ -122,3 +139,16 @@ while True:
             tile_grid.bitmap = moeo_bmp
         if speak.now == 0:
             tile_grid.bitmap = mceo_bmp
+            
+    touch_bar_phy.get()
+    if touch_bar_phy.z.now > 0.5:
+        tile_grid_qr.y += int(touch_bar_phy.x.diff * 60)
+    else:
+        if tile_grid_qr.y > 84:
+            tile_grid_qr.y += (168 - tile_grid_qr.y) // 2
+        else:
+            tile_grid_qr.y += - tile_grid_qr.y // 2
+        if abs(tile_grid_qr.y - 168) < 2:
+            tile_grid_qr.y = 168
+        if abs(tile_grid_qr.y) < 2:
+            tile_grid_qr.y = 0

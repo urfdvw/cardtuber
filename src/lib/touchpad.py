@@ -238,7 +238,10 @@ class TouchBarPhysicsSimple:
         self.z.now = int(any(pads_now))
         if self.z.now:
             touched_pad_ind = [i for i, pad in enumerate(pads_now) if pad]
-            self.x.now = sum(touched_pad_ind) / len(touched_pad_ind)
+            x = sum(touched_pad_ind) / len(touched_pad_ind)
+            self.x.now = x
+            if self.z.diff == 1:
+                self.x.now = x # to clean x.diff
         return Dict2Obj(
             {
                 "x": self.x.now,

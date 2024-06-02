@@ -1,14 +1,6 @@
 [
   {
     "id": 0,
-    "widgetType": "Display",
-    "variableName": "vol",
-    "description": "Display volume value",
-    "x": 360,
-    "y": 250
-  },
-  {
-    "id": 1,
     "widgetType": "Slider",
     "variableName": "thr",
     "description": "volume threshold",
@@ -20,7 +12,7 @@
     "set": 12.3
   },
   {
-    "id": 2,
+    "id": 1,
     "widgetType": "SliderReadOnly",
     "variableName": "vol",
     "description": "volume",
