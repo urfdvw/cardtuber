@@ -55,5 +55,5 @@ class MicVolume:
             for item in self.long_term.queue
             if item is not None
         ]
-        return sum(valid) / self.N_long_term
+        return min(valid) + 1
         

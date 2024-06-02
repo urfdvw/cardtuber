@@ -1,15 +1,13 @@
 [
   {
     "id": 0,
-    "widgetType": "Slider",
+    "widgetType": "SliderReadOnly",
     "variableName": "thr",
     "description": "volume threshold",
     "x": 30,
     "y": 30,
     "rangeMin": 0,
-    "rangeMax": 15,
-    "step": 0.1,
-    "set": 12.3
+    "rangeMax": 15
   },
   {
     "id": 1,

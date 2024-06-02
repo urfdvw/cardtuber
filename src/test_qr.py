@@ -79,7 +79,7 @@ qr_bmp, palette = adafruit_imageload.load(
 rect = Rect(0, 0, 144, 168, fill=0xffffff)
 
 tile_grid = displayio.TileGrid(mceo_bmp, pixel_shader=palette)
-tile_grid_qr = displayio.TileGrid(qr_bmp, pixel_shader=palette)
+tile_grid_qr = displayio.TileGrid(qr_bmp, pixel_shader=palette, y=168)
 
 group = displayio.Group()
 group.append(rect)
@@ -103,8 +103,10 @@ cv.define('thr', 6.0)
 while True:
     mv.record()
     vol = mv.getVolume()
+    thr = mv.getThreshold()
     cv.write('vol', round(vol, 1)) # for monitoring
-    if vol > cv.read('thr'):
+    cv.write('thr', round(thr, 1)) # for monitoring
+    if vol > thr:
         speak.now = 1
     else:
         speak.now = 0
