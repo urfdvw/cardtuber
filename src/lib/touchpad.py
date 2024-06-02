@@ -221,3 +221,27 @@ class TouchBarPhysics:
                 "z": self.z.now,
             }
         )
+
+
+class TouchBarPhysicsSimple:
+    def __init__(
+        self,
+        pads,
+    ):
+        self.pads = pads
+        self.x = State()
+        self.z = State()
+        
+    def get(self):
+        # read sensor
+        pads_now = [r.value for r in self.pads]
+        self.z.now = int(any(pads_now))
+        if self.z.now:
+            touched_pad_ind = [i for i, pad in enumerate(pads_now) if pad]
+            self.x.now = sum(touched_pad_ind) / len(touched_pad_ind)
+        return Dict2Obj(
+            {
+                "x": self.x.now,
+                "z": self.z.now,
+            }
+        )

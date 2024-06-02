@@ -12,13 +12,13 @@ touch_pads = [
     touchio.TouchIn(board.TX)
 ]
 #%% show touched pad
-while False:
+while True:
     for i in range(len(touch_pads)):
         if touch_pads[i].value:
             print(i)
         time.sleep(0.05)
 #%% show raw valus
-while True:
+while False:
     print('startplot:', 'value')
     for i in range(len(touch_pads)):
         print(touch_pads[i].raw_value)

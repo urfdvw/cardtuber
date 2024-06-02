@@ -1,1 +1,1 @@
-from test_bounce_and_mic import *
+from test_qr import *
