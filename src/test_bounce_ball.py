@@ -42,21 +42,7 @@ class BounceBall:
         # display
         self.group = displayio.Group()
         
-        # # draw background
-        # rect = Rect(0, 0, SCREEN_X, SCREEN_Y, fill=0x000000)
-        # self.group.append(rect)
-
-        # draw a square (ball)
-        # self.ball_bitmap = displayio.Bitmap(self.ball_size, self.ball_size, 1)
-        # color_palette = displayio.Palette(1)
-        # color_palette[0] = 0xFFFFFF  # White
-        # self.ball_disp = displayio.TileGrid(
-        #     self.ball_bitmap,
-        #     pixel_shader=color_palette,
-        #     x=int(self.ball_x),
-        #     y=int(self.ball_y)
-        # )
-        
+        # ball
         self.ball_disp = Rect(
             self.ball_x,
             self.ball_y,
@@ -66,20 +52,9 @@ class BounceBall:
         )
         self.group.append(self.ball_disp)
 
-        # pad variables
+        # pad
         self.pad_x = 0
         self.pad_size = 30
-
-        # draw a square (pad)
-        # self.pad_bitmap = displayio.Bitmap(self.pad_size, 1, 1)
-        # color_palette = displayio.Palette(1)
-        # color_palette[0] = 0xFFFFFF  # White
-        # self.pad_disp = displayio.TileGrid(
-        #     self.pad_bitmap,
-        #     pixel_shader=color_palette,
-        #     x=self.pad_x-self.pad_size//2,
-        #     y=SCREEN_Y - 1)
-        
         self.pad_disp = Rect(
             self.pad_x - self.pad_size // 2,
             SCREEN_Y - 1,
@@ -89,18 +64,26 @@ class BounceBall:
         )
         self.group.append(self.pad_disp)
 
-        # Draw a label
-        #     text = str(i) + ': ' + str(gc.mem_free()) # free ram
-        text = "0" # free ram
+        # Draw score
+        text = "0"
         self.text_area = label.Label(
             FONT, text=text, color=0xFFFFFF, x=0, y=4
         )
         self.group.append(self.text_area)
+        
+        # Draw restart
+        self.text_area_restart = label.Label(
+            FONT, text="<<< restart <<<", color=0xFFFFFF, x=-SCREEN_X, y=SCREEN_Y // 2
+        )
+        self.group.append(self.text_area_restart)
 
         # game states
         self.info = ''
         self.count = 0
-        self.game_over = False
+        self.game_over = 0
+            # 0: not over
+            # 2: moment of over
+            # 1: over, waiting to restart
         self.count_up = False
         self.game_over_timer = Timer()
 
@@ -113,13 +96,22 @@ class BounceBall:
         self.count = 0
         self.count_up = True
         self.info = '0'
+        self.game_over = 0
+        self.text_area_restart.x = - SCREEN_X
 
-    def update(self, touch_phy_get):
+    def update(self, touch_phy):
+        touch_phy_get = touch_phy.get()
         # if game over
-        if self.game_over:
-            # self.init()
-            while True:
-                pass
+        if self.game_over == 2: # moment of over
+            self.text_area_restart.x = 0
+            self.game_over = 1
+            return
+        if self.game_over == 1: # waiting to restart
+            if touch_phy_get.z > 1:
+                self.text_area_restart.x -= int(touch_phy.x.diff * SCREEN_X / 3)
+                if self.text_area_restart.x < -SCREEN_X // 3 * 2:
+                    self.init()
+            return
 
         # physics
         self.ball_dy += self.ball_ay
@@ -213,7 +205,7 @@ while True:
     if not frame_app():
         continue
     
-    app.update(touch_bar_phy.get())
+    app.update(touch_bar_phy)
     
     app.display()
     
