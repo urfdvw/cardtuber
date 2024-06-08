@@ -38,13 +38,11 @@ touch_pads = [
     touchio.TouchIn(board.SCL),
     touchio.TouchIn(board.TX)
 ]
-pad_min = [211, 212, 212, 212, 212, 212, 171]
-for i in range(len(touch_pads)):
-    touch_pads[i].threshold = pad_min[i] + 50
-
 
 touch_bar_phy = TouchBarPhysicsSimple(
     pads=touch_pads,
+    # pad_max=[537, 580, 639, 440, 697, 697, 358],
+    # pad_min=[211, 212, 212, 212, 212, 212, 171],
 )
 
 displayio.release_displays()

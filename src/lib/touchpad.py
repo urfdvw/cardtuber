@@ -172,9 +172,8 @@ class TouchBarPhysics:
             print(f"pad_max={pad_max},")
             print(f"pad_min={pad_min},")
             # cancel running the original script
-            import sys
-
-            sys.exit()
+            while True:
+                pass
         else:
             if touch_high:
                 self.pad_max, self.pad_min = pad_max, pad_min
@@ -227,10 +226,16 @@ class TouchBarPhysicsSimple:
     def __init__(
         self,
         pads,
+        pad_max=None,
+        pad_min=None,
     ):
         self.pads = pads
         self.x = State()
         self.z = State()
+        if pad_max is not None and pad_min is not None:
+            for i in range(len(self.pads)):
+                print(self.pads[i].threshold, (pad_min[i] + pad_max[i]) // 2)
+                self.pads[i].threshold = (pad_min[i] + pad_max[i]) // 2
         
     def get(self):
         # read sensor
