@@ -1,122 +1,121 @@
 # CardTuber: Animated Avatar On a Business Card.
 
-People who post videos on Youtube are called Youtubers.
-Youtubers who use animated avatars are called V-tubers.
-V-tubers who only use 4 png images as avatars are called Pngtubers.
-What about, what about, what about people who talk through animated avatars in real life?
+People who post videos on YouTube are called YouTubers.
+YouTubers who use animated avatars are known as V-Tubers.
+V-Tubers who use only four PNG images as their avatars are called PNGTubers.
+But what about people who use animated avatars in real life?
 
-Introducing CardTuber: an animated avatar on a business card.
+Introducing the CardTuber: an animated avatar on a business card.
 
 ## The Story
 
 Let's rewind a bit to the beginning.
-First the earth cooled. And then came the CircuitPython.
-I made an online IDE for CircuitPython (circuitpy.online) and consider myself as a maker.
-I demoed it on phili maker faire in 2022,
-and LI maker faire in 2023.
-I was also planning to go to the LI maker faire in 2024.
-One thing that I always want for the maker faire is a maker badge,
-a fun and powerful one like the supercon one.
-So I decided to make one for this year.
+First, the earth cooled. Then came CircuitPython.
+I created an online IDE for CircuitPython called the "Circuit Python Online IDE" and consider myself a maker.
+I demonstrated it at the Philadelphia Maker Faire in 2022
+and the Long Island Maker Faire in 2023.
+I was also planning to attend the Long Island Maker Faire in 2024.
+One thing I always wanted for the Maker Faire is a maker badge,
+like the fun and powerful one from Supercon.
+So, I decided to make one for this year.
 
-While I was thinking about how to design a maker badge,
-I came across this Business Card Contest on Hackaday.
-I just realized this is the perfect form factor of a badge:
+While thinking about how to design a maker badge,
+I came across a Business Card Contest on Hackaday.
+I realized that this was the perfect form factor for a badge:
 - Business card size
-- introducing myself
-- doing something cool
+- Introduces myself
+- Does something cool
 
 ## The design
 
-Of course this is a business card / badge,
-so it need to have my name on it,
-together with a little bit intro of my self.
-On the other side, people usually have a logo or photo of there business.
+Of course, this is a business card and a badge,
+so on the right side it has my name on it,
+along with a brief introduction about myself.
 
-I can put my youtube avatar there, but that is too boring.
-In one of my recent videos, I made an animated avatar by drawing 4 png images.
-(which is based on the Character Izutsumi in Dungeon Meshi)
-So I think It would be a good idea to put that avatar here.
+On the left side, people typically include a logo or photo of their business.
+I could use my YouTube avatar, but that feels too boring.
+In one of my recent videos, I created an animated avatar by drawing four PNG images
+(inspired by the character Izutsumi in Dungeon Meshi.)
+I think it would be a great idea to use that avatar here.
 
-Of course this is a maker badge for LI Maker Faire,
-The light house on the LI Maker Faire logo is an actual light house at Montauk.
-As a Long Islander, I have been there several times and like it a lot.
-So I found a good photo of that light house on MTA's website,
-and draw a sketch of it.
+Since this is a maker badge for the LI Maker Faire,
+I wanted to incorporate elements related to it.
+The lighthouse in the LI Maker Faire logo is an actual lighthouse in Montauk.
+As a Long Islander, I’ve visited it several times and really like it.
+So, I found a good photo of the lighthouse on the MTA's website and drew a sketch of it.
 
 ## The hardware
 
-Because the avatar need to talk when I talk,
+Because the avatar needs to talk when I talk,
 I need a MIC module to capture the sound.
-This made Seeed Xiao the perfect choice for micro controller board.
-In a small package it includes a
-- powerful computing unit
-- MIC
-- batter management circuit
-
-It also has a acceleration meter and BLE, which I didn't use in this project
+This makes the Seeed Xiao the perfect choice as the microcontroller board.
+Despite its small size, it includes:
+- A powerful computing unit
+- A MIC
+- A battery management circuit
+- (It also has an accelerometer and BLE, which I didn't use for this project.)
 
 The screen I choose is Sharp.
-I mean it is really Sharp (bad pon)....
-Sharp memory LCD are power efficient and also very good in image quality.
-Unlike the OLED screens that are flicking all the time,
-images on Sharp memory LCDs are still which makes it much better when moved a lot.
+I mean it is really Sharp (bad pun)....
+These Sharp memory LCD are not only power-efficient but also offer excellent image quality.
 
-If I tell you this array of resistors are all 1M ohm,
-you probably already know that they are used for capacitive touch.
-And yes, the whole right side of the business card is a linear touch pad.
-Because I don't have too much on the board, I can hide all the traces to the back of the PCB.
-The only thing in the front are the touch pads.
-
+If I tell you that this array of resistors is all 1M ohm,
+you probably know they are used for capacitive touch.
+Yes, the entire right side of the business card is a linear touchpad.
+When making capacitive touch PCBs,
+I usually hide all the traces on the back of the PCB,
+leaving only the touchpads on the front.
+And this one is no exception.
 
 ## The Software
 
 The code is written in CircuitPython,
-which is not only because I am the author of CircuitPython Online IDE,
-but also because it has well support for 52840 microcontrollers, mic and Sharp memory displays.
+not only because I am the author of CircuitPython Online IDE,
+but also because it has excellent support for NRF52840 microcontrollers, MICs, capacitive touch, and Sharp memory displays.
 
 ### Blink and Speak
 
-The mechanism is very similar to the mechanism of the PNG tuber.
-Basically I have 4 images as the combination of mouse open/close and eyes open/close.
-And the system will pick one of the images depending on the status of the eys and mouse.
+The mechanism is very similar to that of a PNGTuber.
+Basically, I have four images representing the combinations of mouth open/closed and eyes open/closed.
+The system selects one of the images based on the current status of the eyes and mouth.
 
-And the avatar will blink randomly every 2~5 seconds.
-This is just achieved by a timer with random time duration.
+The avatar blinks randomly every 2 to 5 seconds,
+achieved with a timer set to a random duration.
 
-The avatar will speak when the volume picked up from the mic is higher than the threshold.
-And when speaking, the avatar will raise a little bit and come back when stop speaking to look more lively.
+The avatar speaks when the volume picked up by the MIC exceeds a certain threshold.
+When speaking, the avatar rises slightly and returns to its original position when it stops,
+which gives a more lively appearance.
 
-The volume is picked up as the log of the amplitude of the sound wave.
-Threshold is just a number.
-However, Maker Faire is a quite busy environment,
-so I actually cannot rely on a pre-set fox number threshold level
-because I don't have any idea of the background noise level.
-I did a bit adaptive algorithm:
-first I keep record of all the volume with a time window,
-and set the threshold to be a little above the minimum volume within the the time window.
-This adaptive threshold actually worked very well.
+The volume is measured as the logarithm of the sound wave's amplitude.
+The threshold is just a number.
+However, the Maker Faire is a very busy environment,
+so I can't rely on a fixed threshold level due to the unpredictable background noise.
+Instead, I implemented an adaptive algorithm:
+The volume levels within a sliding time window are stored in the microcontroller
+and set the threshold to be slightly above the minimum volume within that window.
+This adaptive threshold worked very well.
 
 ### QR code
 
-The Business Card should function as a business card: giving contact information.
-Even though I have a lot written on the card,
-I still want to do that in a fancier way.
-When People ask me about my social/github,
-I can swipe up the texts to bring up the qr code.
+The CardTuber should function as a business card, providing contact information.
+Even though there's a lot written on the card,
+I still wanted to present it in a fancier way.
+When people ask me about my social media or GitHub,
+I can swipe up on the text to reveal a QR code.
+Remember, this whole area is a touchpad!
 
 ## The show
 
-There are hole on the badge for me to ware it stand alone,
+Even though there are holes designed for a lanyard,
+I wanted to wear this as a maker badge together with the badge of the LI Maker Faire.
+So, I 3D-printed a case for the badge,
+which can be attached to the Maker Faire badge with a twist tie.
+The case also has holes to ensure the MIC is not blocked.
 
-However, to ware this as a make badge to gether with the badge of the Maker Faire,
-I 3D printed a case for the badge, which can be fixed to the Maker Faire badge by a twisted wire.
-There are also holes on the case so the mic is not blocked.
-
-Here is how it looked on the Maker Faire day!
+Here is how it looked on Maker Faire day!
 
 ## The bonus
 
-And of course, how can such a thing be complete without games.
+And of course, how can such a thing be complete without games?
 
 ## The end
