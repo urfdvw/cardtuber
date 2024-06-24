@@ -1,0 +1,10 @@
+# Hackaday Project
+
+## description
+
+CardTuber is an electronic business card featuring an animated avatar. 
+It also doubles as a maker badge for the Long Island Maker Faire.
+There is a MIC that picks up the surrounding volume, 
+so when I wear it, the avatar speaks when I speak.
+The text area is also a touchpad. 
+A QR code for my socials can be brought up by swiping on it.
