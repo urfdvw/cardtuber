@@ -57,7 +57,18 @@ Despite its small size, it includes:
 
 The screen I choose is Sharp.
 I mean it is really Sharp (bad pun)....
-These Sharp memory LCD are not only power-efficient but also offer excellent image quality.
+These Sharp Memory LCD are not only power-efficient but also offer excellent image quality.
+
+The Adafruit Sharp Memory LCD module is used here.
+I used a technique I call "back mounting" to attach the module to the PCB.
+In back mounting, a hole is made in the PCB for the screen to be visible from the front,
+while the rest of the module is hidden behind the PCB.
+There is also a cutout for the cable.
+The module has four screw holes,
+but instead of screwing the module onto the PCB,
+I soldered them together.
+This way, the module is "stamped" onto the PCB without significantly increasing the thickness,
+and it looks clean from the front.
 
 If I tell you that this array of resistors is all 1M ohm,
 you probably know they are used for capacitive touch.
@@ -67,11 +78,19 @@ I usually hide all the traces on the back of the PCB,
 leaving only the touchpads on the front.
 And this one is no exception.
 
+There are two battery connectors.
+A coin cell battery is used to keep the business card thin,
+but if longer battery life is needed,
+a LiPo battery can be connected.
+The Xiao NRF52840 board is in charge of the batteries (bad pun again).
+
 ## The Software
 
 The code is written in CircuitPython,
 not only because I am the author of CircuitPython Online IDE,
 but also because it has excellent support for NRF52840 microcontrollers, MICs, capacitive touch, and Sharp memory displays.
+
+Code can be found at: https://github.com/urfdvw/cardtuber
 
 ### Blink and Speak
 
@@ -111,6 +130,8 @@ I wanted to wear this as a maker badge together with the badge of the LI Maker F
 So, I 3D-printed a case for the badge,
 which can be attached to the Maker Faire badge with a twist tie.
 The case also has holes to ensure the MIC is not blocked.
+
+Case file can be found at https://github.com/urfdvw/cardtuber
 
 Here is how it looked on Maker Faire day!
 
