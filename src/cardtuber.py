@@ -16,13 +16,13 @@ class RotaryQueue:
         
 
 class MicVolume:
-    def __init__(self, N=30, length=160):
+    def __init__(self, N=30, M=100, length=160):
         """
         N: number of max/min in the queue
         lenth: number of samples in each record piece
         """
         self.N_short_term = N
-        self.N_long_term = N * 10
+        self.N_long_term = M
         self.length = length
         
         self.mic = Mic()
@@ -55,5 +55,5 @@ class MicVolume:
             for item in self.long_term.queue
             if item is not None
         ]
-        return min(valid) + 1
+        return min(valid) + 2
         

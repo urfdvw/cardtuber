@@ -18,7 +18,7 @@ import adafruit_imageload
 # Mine
 from cardtuber import MicVolume
 from connected_variables import ConnectedVariables
-from touchpad import State, TouchBarPhysicsSimple
+from touchpad import State, TouchBarPhysics
 
 #%% parameters
 jump_scale = 4
@@ -39,8 +39,12 @@ touch_pads = [
     touchio.TouchIn(board.TX)
 ]
 
-touch_bar_phy = TouchBarPhysicsSimple(
+touch_bar_phy = TouchBarPhysics(
     pads=touch_pads,
+    # battery
+    pad_max=[391,458,511,515,484,436,266],
+    pad_min=[203,207,208,208,207,207,168],
+    # usb
     # pad_max=[537, 580, 639, 440, 697, 697, 358],
     # pad_min=[211, 212, 212, 212, 212, 212, 171],
 )
@@ -49,7 +53,7 @@ displayio.release_displays()
 
 bus = board.SPI()
 chip_select_pin = board.RX
-framebuffer = sharpdisplay.SharpMemoryFramebuffer(bus, chip_select_pin, width=144, height=168, baudrate=8000000)
+framebuffer = sharpdisplay.SharpMemoryFramebuffer(bus, chip_select_pin, width=144, height=168, baudrate=15000000)
 display = framebufferio.FramebufferDisplay(framebuffer, rotation = 0)
 
 mceo_bmp, palette = adafruit_imageload.load(
@@ -96,7 +100,7 @@ print(gc.mem_free())
 #%% main
 # Loop forever so you can enjoy your image
 
-mv = MicVolume(N=4, length=80)
+mv = MicVolume(N=1, length=80)
 speak = State()
 blink = State()
 blink_timer = 0
@@ -146,7 +150,7 @@ while True:
             tile_grid.bitmap = mceo_bmp
             
     touch_bar_phy.get()
-    if touch_bar_phy.z.now > 0.5:
+    if touch_bar_phy.z.now > 1.5:
         tile_grid_qr.y += int(touch_bar_phy.x.diff * 50)
     else:
         if tile_grid_qr.y > 84:

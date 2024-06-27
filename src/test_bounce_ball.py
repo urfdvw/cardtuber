@@ -107,7 +107,7 @@ class BounceBall:
             self.game_over = 1
             return
         if self.game_over == 1: # waiting to restart
-            if touch_phy_get.z > 1:
+            if touch_phy_get.z > 1.5:
                 self.text_area_restart.x -= int(touch_phy.x.diff * SCREEN_X / 3)
                 if self.text_area_restart.x < -SCREEN_X // 3 * 2:
                     self.init()
@@ -118,7 +118,7 @@ class BounceBall:
         self.ball_x += self.ball_dx
         self.ball_y += self.ball_dy
 
-        if touch_phy_get.z > 1:
+        if touch_phy_get.z > 1.5:
             if True:  # absolute position
                 self.pad_x = (6 - touch_phy_get.x) / 6 * SCREEN_X - 1 - self.pad_size // 2
             else: # relative position
@@ -184,8 +184,8 @@ touch_pads = [
 ]
 touch_bar_phy = TouchBarPhysics(
     pads=touch_pads,
-    pad_max=[537, 580, 639, 440, 697, 697, 358],
-    pad_min=[211, 212, 212, 212, 212, 212, 171],
+    pad_max=[391,458,511,515,484,436,266],
+    pad_min=[203,207,208,208,207,207,168],
 )
 
 app = BounceBall()
