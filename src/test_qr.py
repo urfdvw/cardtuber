@@ -19,6 +19,7 @@ import adafruit_imageload
 from cardtuber import MicVolume
 from connected_variables import ConnectedVariables
 from touchpad import State, TouchBarPhysics
+from background import FpsControl, FpsMonitor
 
 #%% parameters
 jump_scale = 4
@@ -97,26 +98,65 @@ display.root_group = group
 
 print(gc.mem_free())
 
+class LoopProfile:
+    def __init__(self):
+        self.durations = []
+        self.N = 0
+        self.sums = []
+        self.start = t()
+        
+    def log(self):
+        current_time = t()
+        self.durations.append(current_time - self.start)
+        self.start = current_time
+        
+    def end(self):
+        if self.N == 0:
+            self.sums = [d + 0 for d in self.durations]
+        else:
+            for i in range(len(self.durations)):
+                self.sums[i] += self.durations[i]
+        self.durations = []
+        self.N += 1
+        self.start = t()
+        
+    def report(self):
+        print([
+            s / self.N
+            for s in self.sums
+        ])
+    
+
 #%% main
 # Loop forever so you can enjoy your image
 
-mv = MicVolume(N=1, length=80)
+mv = MicVolume(N=1, length=30)
 speak = State()
 blink = State()
+jump = State()
 blink_timer = 0
 blink_last_t = t()
 cv.define('vol', 0.0)
 cv.define('thr', 6.0)
+
+# loopp = LoopProfile()
+
 while True:
+# for _ in range(300):
+
     mv.record()
+    # loopp.log()
+    
     vol = mv.getVolume()
     thr = mv.getThreshold()
-    cv.write('vol', round(vol, 1)) # for monitoring
-    cv.write('thr', round(thr, 1)) # for monitoring
+    # cv.write('vol', round(vol, 1)) # for monitoring
+    # cv.write('thr', round(thr, 1)) # for monitoring
     if vol > thr:
         speak.now = 1
     else:
         speak.now = 0
+        
+    # loopp.log()
         
     if blink.now == 0 and t() - blink_last_t >= blink_timer:
         blink.now = 1
@@ -129,14 +169,17 @@ while True:
     
     if speak.diff == 1:
         tile_grid.bitmap = moeo_bmp
-        tile_grid.y = -jump_scale // 2
+        jump.now = -jump_scale // 2
     elif speak.diff == -1:
         tile_grid.bitmap = mceo_bmp
-        tile_grid.y = -jump_scale // 2
+        jump.now = -jump_scale // 2
     elif speak.diff == 0 and speak.now == 1:
-        tile_grid.y = -jump_scale
+        jump.now = -jump_scale
     elif speak.diff == 0 and speak.now == 0:
-        tile_grid.y = 0
+        jump.now = 0
+        
+    if jump.diff:
+        tile_grid.y = jump.now
 
     if blink.diff == 1:
         if speak.now == 1:
@@ -149,15 +192,23 @@ while True:
         if speak.now == 0:
             tile_grid.bitmap = mceo_bmp
             
-    touch_bar_phy.get()
-    if touch_bar_phy.z.now > 1.5:
-        tile_grid_qr.y += int(touch_bar_phy.x.diff * 50)
-    else:
-        if tile_grid_qr.y > 84:
-            tile_grid_qr.y += (168 - tile_grid_qr.y) // 2
-        else:
-            tile_grid_qr.y += - tile_grid_qr.y // 2
-        if abs(tile_grid_qr.y - 168) < 2:
-            tile_grid_qr.y = 168
-        if abs(tile_grid_qr.y) < 2:
-            tile_grid_qr.y = 0
+    # loopp.log()
+            
+    # touch_bar_phy.get()
+    # if touch_bar_phy.z.now > 1.5:
+    #     tile_grid_qr.y += int(touch_bar_phy.x.diff * 50)
+    # else:
+    #     if tile_grid_qr.y not in (0, 168):
+    #         if tile_grid_qr.y > 84:
+    #             tile_grid_qr.y += (168 - tile_grid_qr.y) // 2
+    #         else:
+    #             tile_grid_qr.y += - tile_grid_qr.y // 2
+    #         if abs(tile_grid_qr.y - 168) < 2:
+    #             tile_grid_qr.y = 168
+    #         if abs(tile_grid_qr.y) < 2:
+    #             tile_grid_qr.y = 0
+            
+    # loopp.log()
+    # loopp.end()
+
+# loopp.report()

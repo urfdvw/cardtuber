@@ -234,7 +234,7 @@ class TouchBarPhysicsSimple:
         self.z = State()
         if pad_max is not None and pad_min is not None:
             for i in range(len(self.pads)):
-                print(self.pads[i].threshold, (pad_min[i] + pad_max[i]) // 2)
+                # print(self.pads[i].threshold, (pad_min[i] + pad_max[i]) // 2)
                 self.pads[i].threshold = pad_max[i] - (pad_min[i] + pad_max[i]) // 4
         
     def get(self):
