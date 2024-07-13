@@ -194,19 +194,19 @@ while True:
             
     # loopp.log()
             
-    # touch_bar_phy.get()
-    # if touch_bar_phy.z.now > 1.5:
-    #     tile_grid_qr.y += int(touch_bar_phy.x.diff * 50)
-    # else:
-    #     if tile_grid_qr.y not in (0, 168):
-    #         if tile_grid_qr.y > 84:
-    #             tile_grid_qr.y += (168 - tile_grid_qr.y) // 2
-    #         else:
-    #             tile_grid_qr.y += - tile_grid_qr.y // 2
-    #         if abs(tile_grid_qr.y - 168) < 2:
-    #             tile_grid_qr.y = 168
-    #         if abs(tile_grid_qr.y) < 2:
-    #             tile_grid_qr.y = 0
+    touch_bar_phy.get()
+    if touch_bar_phy.z.now > 1.5:
+        tile_grid_qr.y += int(touch_bar_phy.x.diff * 50)
+    else:
+        if tile_grid_qr.y not in (0, 168):
+            if tile_grid_qr.y > 84:
+                tile_grid_qr.y += (168 - tile_grid_qr.y) // 2
+            else:
+                tile_grid_qr.y += - tile_grid_qr.y // 2
+            if abs(tile_grid_qr.y - 168) < 2:
+                tile_grid_qr.y = 168
+            if abs(tile_grid_qr.y) < 2:
+                tile_grid_qr.y = 0
             
     # loopp.log()
     # loopp.end()
